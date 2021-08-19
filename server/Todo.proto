@@ -1,0 +1,10 @@
+syntax="proto3";
+
+package main;
+
+message Todo{
+    string Name=1;
+    string Type=2;
+    string Owner=3;
+    string Date=4;
+}
