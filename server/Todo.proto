@@ -8,3 +8,10 @@ message Todo{
     string Owner=3;
     string Date=4;
 }
+
+
+message TodoFull{
+    string Id=1;
+    Todo  Todo=2;
+}
+

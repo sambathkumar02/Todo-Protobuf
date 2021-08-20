@@ -4,12 +4,24 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 
 	"github.com/golang/protobuf/proto"
 )
 
-var TodoList map[string]Todo
+var TodoList []TodoFull
+
+func GenerateID() string {
+	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+	b := make([]rune, 10)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
+
+}
 
 func AddTodo(response http.ResponseWriter, request *http.Request) {
 	request_data, err := ioutil.ReadAll(request.Body)
@@ -22,11 +34,19 @@ func AddTodo(response http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		log.Fatal("Error While decoding!")
 	}
-	fmt.Print(todo)
+	id := GenerateID()
+	full_object := TodoFull{Id: id, Todo: todo}
+	TodoList = append(TodoList, full_object)
 
 }
 
 func ListTodo(response http.ResponseWriter, request *http.Request) {
+
+	for i := range TodoList {
+		data, _ := proto.Marshal(TodoList[i])
+		response.Write(data)
+
+	}
 
 }
 
